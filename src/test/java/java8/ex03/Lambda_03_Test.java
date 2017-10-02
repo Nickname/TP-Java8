@@ -12,14 +12,16 @@ import java.util.List;
 public class Lambda_03_Test {
 
     // tag::PersonProcessor[]
-    interface PersonProcessor {
-        void process(Person p);
+    interface PersonProcessor<I> {
+        void process(I p);
     }
     // end::PersonProcessor[]
 
     // tag::forEach[]
-    private void forEach(List<Person> source, PersonProcessor processor) {
-       // TOD0
+    private <I> void forEach(List<I> source, PersonProcessor<I> processor) {
+    		for (I i : source) {
+        		processor.process(i);
+    		}
     }
     // end::forEach[]
 
@@ -34,10 +36,14 @@ public class Lambda_03_Test {
         // TODO vérifier qu'une personne à un nom qui commence par last
         // TODO vérifier qu'une personne à un age > 0
         // TODO la vérification se fait via une assertion (mot clé assert)
-        PersonProcessor verifyPerson = null;
+        PersonProcessor<Person> verifyPerson = p -> {
+        		assert p.getFirstname().startsWith("first");
+        		assert p.getLastname().startsWith("last");
+        		assert p.getAge() > 0;
+        };
 
         assert verifyPerson != null;
-
+        
         forEach(personList, verifyPerson);
     }
     // end::test_verify_person[]
